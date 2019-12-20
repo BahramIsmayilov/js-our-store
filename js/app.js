@@ -1,65 +1,56 @@
 (function() {
-    //select all buttons
-    const filterBtn = document.querySelectorAll('.filter-btn');
-    //console.log(filterBtn);
+  //all images
+  let imageList = [];
+  let counter = 0;
+
+  const images = document.querySelectorAll('.store-img');
+  const container = document.querySelector('.lightbox-container');
+  const item = document.querySelector('.lightbox-item');
+  const closeIcon = document.querySelector('.lightbox-close');
+  const btnLeft = document.querySelector('.btnLeft');
+  const btnRight = document.querySelector('.btnRight');
+
+  //add all images to the array
+  images.forEach(function(img) {
+    imageList.push(img.src);
+  });
+  // console.log(imageList);
+  //open module
+  images.forEach(function(img) {
+    img.addEventListener('click', function(event){
+      container.classList.add('show');
+
+      //get source
+      let src = event.target.src;
+     // console.log(src);
+      counter = imageList.indexOf(src);
+      //console.log(counter);
+      //show modal with an image
+      item.style.backgroundImage = `url(${src})`;
+      
+    });
+  });
+  // close module
+  closeIcon.addEventListener('click', function(){
+    container.classList.remove('show');
     
-    filterBtn.forEach(function(btn) {
-        btn.addEventListener('click', function(event) {
-            //prevent default action
-            event.preventDefault();
-            const value = event.target.dataset.filter;
-            //console.log(value);
-            
-            const items = document.querySelectorAll('.store-item');
-            //console.log(items);
-            
-            items.forEach(function(item) {
-                if(value === 'all'){
-                    item.style.display = 'block'
-                } else {
-                    if(item.classList.contains(value)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                }
-            });
-        });
-    });
-})();
+  });
 
-//search input
+  btnLeft.addEventListener('click', function() {
+    counter--;
+    if(counter < 0) {
+      counter = imageList.length - 1;
+    }
+    item.style.backgroundImage = `url(${imageList[counter]})`;
+    console.log(counter);
+  });
+  btnRight.addEventListener('click', function() {
+    counter++;
+    if(counter > imageList.length - 1) {
+      counter = 0;
+    }
+    item.style.backgroundImage = `url(${imageList[counter]})`;
+    console.log(counter);
+  });
 
-(function() {
-    const search = document.getElementById('search-item');
-    search.addEventListener('keyup', function() {
-        let value = search.value.toLowerCase().trim();
-        //console.log(value);
-        
-        const items = document.querySelectorAll('.store-item');
-
-        items.forEach(function(item) {
-            let type = item.dataset.item;
-            // console.log(items);
-            // if(type.includes(value)) {
-            //     item.style.display = 'block';
-            // } else {
-            //     item.style.display = 'none';
-            // }
-
-            let length = value.length;
-            let match = type.slice(0, length);
-
-            console.log(value);
-            console.log(match);
-            
-            if(value === match) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-
-
-        });
-    });
 })();
